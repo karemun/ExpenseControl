@@ -1,10 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 import Budget from './components/Budget.vue'
+import BudgetControl from './components/BudgetControl.vue'
 
 const budget = ref(0)
+const available = ref(0)
+
 const defineBudget = (amount) => {
   budget.value = amount
+  available.value = amount
 }
 </script>
 
@@ -17,6 +21,12 @@ const defineBudget = (amount) => {
         <Budget
           v-if="budget === 0"
           @define-budget="defineBudget"
+        />
+
+        <BudgetControl
+          v-else
+          :budget="budget"
+          :available="available"
         />
       </div>
     </header>
