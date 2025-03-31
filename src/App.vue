@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue'
 import Budget from './components/Budget.vue'
 import BudgetControl from './components/BudgetControl.vue'
 import Modal from './components/Modal.vue'
+import { generateId } from './helpers'
 import iconNewExpense from './assets/img/nuevo-gasto.svg'
 
 const modal = reactive({
@@ -11,6 +12,14 @@ const modal = reactive({
 })
 const budget = ref(0)
 const available = ref(0)
+const expense = reactive({
+  id: null,
+  name: '',
+  amount: '',
+  category: '',
+  date: Date.now(),
+})
+const expenses = ref([])
 
 const defineBudget = (amount) => {
   budget.value = amount
@@ -31,6 +40,22 @@ const closeModal = () => {
   setTimeout(() => {
     modal.show = false
   }, 300)
+}
+
+const saveExpense = () => {
+  expenses.value.push({
+    ...expense,
+    id: generateId()
+  })
+
+  closeModal()
+  Object.assign(expense, {
+    name: '',
+    amount: '',
+    category: '',
+    id: null,
+    date: Date.now(),
+  })
 }
 </script>
 
@@ -64,8 +89,12 @@ const closeModal = () => {
 
       <Modal
         v-if="modal.show"
-        @close-modal="closeModal"
         :modal="modal"
+        v-model:name="expense.name"
+        v-model:amount="expense.amount"
+        v-model:category="expense.category"
+        @close-modal="closeModal"
+        @save-expense="saveExpense"
       />
     </main>
   </div>
