@@ -114,6 +114,7 @@ const saveExpense = () => {
       <Modal
         v-if="modal.show"
         :modal="modal"
+        :available="available"
         v-model:name="expense.name"
         v-model:amount="expense.amount"
         v-model:category="expense.category"

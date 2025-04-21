@@ -21,13 +21,18 @@ const props = defineProps({
         type: String,
         required: true, 
     },
+    available: {
+        type: Number,
+        required: true
+    }
 });
 
 const error = ref('');
 
 const addExpense = () => {
-    const { amount, category, name } = props
+    const { amount, category, name, available } = props
 
+    // Validate if all fields are filled
     if([amount, category, name].includes('')) {
         error.value = 'All fields are required';
         setTimeout(() => {
@@ -35,8 +40,17 @@ const addExpense = () => {
         }, 3000);
         return
     }
+    // Validate amount
     if(amount <= 0) {
         error.value = 'Invalid amount';
+        setTimeout(() => {
+            error.value = '';
+        }, 3000);
+        return
+    }
+    // Validate if there is enough money
+    if(amount > available) {
+        error.value = 'You cannot exceed the budget';
         setTimeout(() => {
             error.value = '';
         }, 3000);
