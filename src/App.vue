@@ -61,7 +61,9 @@ const saveExpense = () => {
 </script>
 
 <template>
-  <div>
+  <div
+    :class="{fixed: modal.show}"
+  >
     <header>
       <h1>Expense Control</h1>
 
@@ -139,6 +141,10 @@ const saveExpense = () => {
   }
   h2 {
     font-size: 3rem;
+  }
+  .fixed {
+    overflow: hidden;
+    height: 100vh;
   }
   header {
     background-color: var(--blue);
