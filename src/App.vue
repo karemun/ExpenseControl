@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue'
 import Budget from './components/Budget.vue'
 import BudgetControl from './components/BudgetControl.vue'
 import Modal from './components/Modal.vue'
+import Expense from './components/Expense.vue'
 import { generateId } from './helpers'
 import iconNewExpense from './assets/img/nuevo-gasto.svg'
 
@@ -79,6 +80,16 @@ const saveExpense = () => {
     </header>
 
     <main v-if="budget > 0">
+      <div class="container list-expenses">
+        <h2>{{ expenses.length > 0 ? 'Expenses' : 'No expenses yet' }}</h2>
+
+        <Expense
+          v-for="expense in expenses"
+          :key="expense.id"
+          :expense="expense"
+        />
+      </div>
+
       <div class="add-expense">
         <img 
           :src="iconNewExpense" 
@@ -162,5 +173,12 @@ const saveExpense = () => {
   .add-expense img {
     width: 5rem;
     cursor: pointer;
+  }
+  .list-expenses {
+    margin-top: 10rem;
+  }
+  .list-expenses h2 {
+    font-weight: 900;
+    color: var(--gray-dark);
   }
 </style>

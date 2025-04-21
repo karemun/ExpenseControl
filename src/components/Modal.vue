@@ -104,9 +104,10 @@ const addExpense = () => {
                         <option value="savings">Savings</option>
                         <option value="food">Food</option>
                         <option value="home">Home</option>
-                        <option value="clothing">Clothing</option>
+                        <option value="expenses">Expenses</option>
                         <option value="health">Health</option>
                         <option value="leisure">Leisure</option>
+                        <option value="suscriptions">Suscriptions</option>
                         <option value="other">Other</option>
                     </select>
                 </div>
