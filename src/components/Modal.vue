@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import Alert from './Alert.vue';
 import closeModal from '../assets/img/cerrar.svg'
 
@@ -24,13 +24,18 @@ const props = defineProps({
     available: {
         type: Number,
         required: true
+    },
+    id: {
+        type: [String, null],
+        required: true
     }
 });
 
 const error = ref('');
+const oldAmount = props.amount;
 
 const addExpense = () => {
-    const { amount, category, name, available } = props
+    const { amount, category, name, available, id } = props
 
     // Validate if all fields are filled
     if([amount, category, name].includes('')) {
@@ -49,16 +54,31 @@ const addExpense = () => {
         return
     }
     // Validate if there is enough money
-    if(amount > available) {
-        error.value = 'You cannot exceed the budget';
-        setTimeout(() => {
-            error.value = '';
-        }, 3000);
-        return
+    if(id) {
+        // Existing expense
+        if(amount > oldAmount + available) {
+            error.value = 'You cannot exceed the budget';
+            setTimeout(() => {
+                error.value = '';
+            }, 3000);
+            return
+        }
+    } else {
+        if(amount > available) {
+            error.value = 'You cannot exceed the budget';
+            setTimeout(() => {
+                error.value = '';
+            }, 3000);
+            return
+        }
     }
 
     emit('save-expense');
 }
+
+const isEditing = computed(() => {
+    return props.id;
+})
 </script>
 
 <template>
@@ -79,7 +99,9 @@ const addExpense = () => {
                 class="new-expense"
                 @submit.prevent="addExpense"
             >
-                <legend>Add Expense</legend>
+                <legend>
+                    {{ isEditing ? 'Update Expense' : 'Add Expense'}}
+                </legend>
 
                 <Alert v-if="error">
                     {{ error }}
@@ -128,7 +150,7 @@ const addExpense = () => {
 
                 <input 
                     type="submit"
-                    value="Add Expense"
+                    :value="[isEditing ? 'Update Expense' : 'Add Expense']"
                 />
             </form>
         </div>

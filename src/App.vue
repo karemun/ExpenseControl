@@ -32,6 +32,12 @@ watch(expenses, () => {
   deep: true
 })
 
+watch(modal, () => {
+  if(!modal.show) {
+    resetExpense()
+  }
+})
+
 const defineBudget = (amount) => {
   budget.value = amount
   available.value = amount
@@ -54,12 +60,24 @@ const closeModal = () => {
 }
 
 const saveExpense = () => {
-  expenses.value.push({
-    ...expense,
-    id: generateId()
-  })
+  if(expense.id) {
+    // Update
+    const { id } = expense
+    const i = expenses.value.findIndex((expense) => expense.id === id)
+    expenses.value[i] = {...expense}
+  } else {
+    // Create
+    expenses.value.push({
+      ...expense,
+      id: generateId()
+    })
+  }
 
   closeModal()
+  resetExpense()
+}
+
+const resetExpense = () => {
   Object.assign(expense, {
     name: '',
     amount: '',
@@ -67,6 +85,12 @@ const saveExpense = () => {
     id: null,
     date: Date.now(),
   })
+}
+
+const selectExpense = (id) => {
+  const expenseSelected = expenses.value.filter(expense => expense.id === id)[0]
+  Object.assign(expense, expenseSelected)
+  showModal()
 }
 </script>
 
@@ -100,6 +124,7 @@ const saveExpense = () => {
           v-for="expense in expenses"
           :key="expense.id"
           :expense="expense"
+          @select-expense="selectExpense"
         />
       </div>
 
@@ -113,6 +138,7 @@ const saveExpense = () => {
 
       <Modal
         v-if="modal.show"
+        :id="expense.id"
         :modal="modal"
         :available="available"
         v-model:name="expense.name"
