@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import Alert from './Alert.vue';
 import closeModal from '../assets/img/cerrar.svg'
 
-const emit = defineEmits(['close-modal', 'save-expense', 'update:name', 'update:amount', 'update:category']);
+const emit = defineEmits(['close-modal', 'save-expense', 'update:name', 'update:amount', 'update:category', 'delete-expense']);
 const props = defineProps({
     modal: {
         type: Object,
@@ -153,6 +153,15 @@ const isEditing = computed(() => {
                     :value="[isEditing ? 'Update Expense' : 'Add Expense']"
                 />
             </form>
+
+            <button
+                v-if="isEditing"
+                type="button"
+                class="btn-delete"
+                @click="emit('delete-expense')"
+            >
+                Delete Expense
+            </button>
         </div>
     </div>
 </template>
@@ -218,6 +227,18 @@ const isEditing = computed(() => {
     background-color: var(--blue);
     color: var(--white);
     font-weight: 700;
+    cursor: pointer;
+}
+.btn-delete {
+    border: none;
+    padding: 1rem;
+    width: 100%;
+    background-color: #EF4444;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-top: 10rem;
     cursor: pointer;
 }
 </style>

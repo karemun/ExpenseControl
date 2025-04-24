@@ -92,6 +92,13 @@ const selectExpense = (id) => {
   Object.assign(expense, expenseSelected)
   showModal()
 }
+
+const deleteExpense = () => {
+  if(confirm('Are you sure you want to delete this expense?')) {
+    expenses.value = expenses.value.filter(expenseState => expenseState.id !== expense.id)
+    closeModal()
+  }
+}
 </script>
 
 <template>
@@ -146,6 +153,7 @@ const selectExpense = (id) => {
         v-model:category="expense.category"
         @close-modal="closeModal"
         @save-expense="saveExpense"
+        @delete-expense="deleteExpense"
       />
     </main>
   </div>
