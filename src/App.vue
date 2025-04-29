@@ -129,6 +129,13 @@ const filterExpenses = computed(() => {
   }
   return expenses.value
 })
+
+const resetApp = () => {
+  if(confirm('Do you want to reset budgets and expenses?')) {
+    expenses.value = []
+    budget.value = 0;
+  }
+}
 </script>
 
 <template>
@@ -149,6 +156,7 @@ const filterExpenses = computed(() => {
           :budget="budget"
           :spent="spent"
           :available="available"
+          @reset-app="resetApp"
         />
       </div>
     </header>
